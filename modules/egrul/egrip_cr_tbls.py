@@ -359,8 +359,8 @@ def all_tables_egrip(var_out, var_schem: str):
             cur.execute(ssql)
             answer = cur.fetchone()[0]
             if answer:
-                logger.info(f"Table {table_name} creation failed! Table exist!!")
+                print(f"Table {table_name} creation failed! Table exist!!")
             else:
                 cur.execute(sql_tt)
                 conn.commit()
-                logger.info(f"Table {table_name} created successfully")
+                print(f"Table {table_name} created successfully")

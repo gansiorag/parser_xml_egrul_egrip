@@ -337,16 +337,16 @@ def get_gar(adress: str, cv: dict):
     logger = get_logger()
     logger.warning("<========= GET_GAR =========>")
     try:
-        # logger.info(f"cv: {cv}")
+        # print(f"cv: {cv}")
         gar = cv['gar']
         headers = gar['headers']
 
         json_data = gar['search']['json_data']
         json_data['search_string'] = adress
         gar_url = gar['search']['url']
-        # logger.info(f"URL сервиса ГАР: {gar_url}")
-        # logger.info(f"json_data сервиса ГАР: {json_data}")
-        # logger.info(f"header сервиса ГАР: {headers}")
+        # print(f"URL сервиса ГАР: {gar_url}")
+        # print(f"json_data сервиса ГАР: {json_data}")
+        # print(f"header сервиса ГАР: {headers}")
         response = requests.post(
             gar_url,
             headers=headers,
@@ -359,16 +359,16 @@ def get_gar(adress: str, cv: dict):
             'response_body': response.json() if response.content else 'Пустой ответ'
         }
 
-        logger.info(f"Код ответа: {result['status_code']}")
-        logger.info(f"Тело ответа: {result['response_body']}")
+        print(f"Код ответа: {result['status_code']}")
+        print(f"Тело ответа: {result['response_body']}")
         if result['status_code'] == 200:
             k_adr = len(result['response_body']['results'])
-            logger.info(f"Количество адресов: {k_adr}")
+            print(f"Количество адресов: {k_adr}")
             if k_adr > 0:
                 adr = result['response_body']['results'][0]
-                logger.info(f"guid: {adr['guid']}")
-                logger.info(f"Adress: {adr['full']}")
-                logger.info("*************************************")
+                print(f"guid: {adr['guid']}")
+                print(f"Adress: {adr['full']}")
+                print("*************************************")
                 return adr['guid'], adr['full']
             else:
                 return None, None
@@ -376,8 +376,8 @@ def get_gar(adress: str, cv: dict):
             return None, None
     except requests.exceptions.RequestException as e:
         logger.error(f"Ошибка при запросе к сервису ГАР: {str(e)}")
-        logger.info(f"header сервиса ГАР: {headers}")
-        logger.info(f"status_code: {response.status_code}")
+        print(f"header сервиса ГАР: {headers}")
+        print(f"status_code: {response.status_code}")
         return None, None
 
 
@@ -394,16 +394,16 @@ def get_gar_id(adress_id: str, cv: dict):
     logger = get_logger()
     logger.warning("<========= GET_GAR_ID =========>")
     try:
-        # logger.info(f"cv: {cv}")
+        # print(f"cv: {cv}")
         gar = cv['gar']
         headers = gar['headers']
 
         json_data = gar["houses"]['json_data']
         json_data["guid"] = adress_id
         gar_url = gar['search']['url']
-        # logger.info(f"URL сервиса ГАР: {gar_url}")
-        # logger.info(f"json_data сервиса ГАР: {json_data}")
-        # logger.info(f"header сервиса ГАР: {headers}")
+        # print(f"URL сервиса ГАР: {gar_url}")
+        # print(f"json_data сервиса ГАР: {json_data}")
+        # print(f"header сервиса ГАР: {headers}")
         response = requests.post(
             gar_url,
             headers=headers,
@@ -416,21 +416,21 @@ def get_gar_id(adress_id: str, cv: dict):
             'response_body': response.json() if response.content else 'Пустой ответ'
         }
 
-        logger.info(f"Код ответа: {result['status_code']}")
-        logger.info(f"Тело ответа: {result['response_body']}")
+        print(f"Код ответа: {result['status_code']}")
+        print(f"Тело ответа: {result['response_body']}")
         if result['status_code'] == 200:
-            logger.info(f"Количество адресов: {len(result['response_body']['results'])}")
+            print(f"Количество адресов: {len(result['response_body']['results'])}")
             adr = result['response_body']['results'][0]
-            logger.info(f"guid: {adr['guid']}")
-            logger.info(f"Adress: {adr['full']}")
-            logger.info("*************************************")
+            print(f"guid: {adr['guid']}")
+            print(f"Adress: {adr['full']}")
+            print("*************************************")
             return adr['guid'], adr['full']
         else:
             return None, None
     except requests.exceptions.RequestException as e:
         logger.error(f"Ошибка при запросе к сервису ГАР из get_gar_id: {str(e)}")
-        logger.info(f"header сервиса ГАР: {headers}")
-        logger.info(f"status_code: {response.status_code}")
+        print(f"header сервиса ГАР: {headers}")
+        print(f"status_code: {response.status_code}")
         return None, None
 
 
@@ -541,7 +541,7 @@ def conn_base(var_con):
         conn = sqlite3.connect('/home/gansior/MyProject/parser_xml_egrul_egrip/dataset/egrul_egrip.db')
         return conn
     except Exception as error:
-        logger.info(error)
+        print(error)
         return None
 
 

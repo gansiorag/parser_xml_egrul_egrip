@@ -254,7 +254,7 @@ def parser_svip(doc_source, rez_dict: dict, CODES_FNS: list):
             #                          base_data, CODES_FNS)
             #             k_s_z += 1
             #     if isinstance(doc_source[kk], dict):
-            #         logger.info("dict")
+            #         print("dict")
             #         sv_zap_egrip(doc_source[kk], FORMAT_EGRIP,
             #                      CV['schema_get'],
             #                      base_data, CODES_FNS)
@@ -282,10 +282,10 @@ def parser_mesage_egrip(mess_i, codes_fns: list, token: str):
     """
     # try:
     # Первичная информация о сообщении
-    logger.info("EGRIP message!!!!")
-    logger.info(f"Message length: {len(mess_i)}")
+    print("EGRIP message!!!!")
+    print(f"Message length: {len(mess_i)}")
     logger.debug(codes_fns)
-    logger.info("Processing message...")
+    print("Processing message...")
     # Process the message
     # Определяем версию формата vers_form
     vers_form = mess_i.split('ВерсФорм="')[1].split('" ТипИнф=')[0]
@@ -306,10 +306,10 @@ def parser_mesage_egrip(mess_i, codes_fns: list, token: str):
 
         # Обрабатываем документ(ы) одинаково, в зависимости от типа
         if isinstance(documents, list):
-            logger.info(f'=== Документов {len(documents)} в списке ')
+            print(f'=== Документов {len(documents)} в списке ')
             for dd in documents:
                 num_doc += 1
-                logger.info(f'=== Документ {num_doc} === from {len(documents)}')
+                print(f'=== Документ {num_doc} === from {len(documents)}')
                 logger.debug('step 1 egrip', dd)
                 if "СвИП" in dd:
                     doc_source = dd["СвИП"]
@@ -317,7 +317,7 @@ def parser_mesage_egrip(mess_i, codes_fns: list, token: str):
                     parser_svip(doc_source, new_d, codes_fns)
         elif isinstance(documents, dict):
             num_doc += 1
-            logger.info(f"=== Документ {num_doc} === from dict")
+            print(f"=== Документ {num_doc} === from dict")
             if "СвИП" in documents:
                 parser_svip(documents["СвИП"], rez_dict, codes_fns)
 

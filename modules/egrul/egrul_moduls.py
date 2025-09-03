@@ -148,7 +148,7 @@ def parser_svul(doc_source: dict, codes_fns: list, cv: dict):
         cur (_type_): _description_
         logger (_type_): _description_
     """
-    logger.info('Start parser_svul .')
+    print('Start parser_svul .')
     k_s_z = 0
     isd = {"СвЮЛ": doc_source}
     base_data = {
@@ -287,14 +287,14 @@ def parser_mesage_egrul(mess_i, codes_fns: list, cv: dict):
         logger (_type_): _description_
     """
     # try:
-    logger.info("parser_mesage_egrul  - EGRUL message!!!!")
+    print("parser_mesage_egrul  - EGRUL message!!!!")
     # mess_i = message.value.decode('utf-8', errors='ignore')
 
-    # logger.info(f"Received message: {mess_i}")
-    logger.info(f"Message length: {len(mess_i)}")
+    # print(f"Received message: {mess_i}")
+    print(f"Message length: {len(mess_i)}")
     print("codes_fns == ", codes_fns)
     if mess_i:
-        logger.info("Processing message...")
+        print("Processing message...")
         # print(mess_i)
         # Process the message
         # Определяем тип данных type_data  и версию формата vers_form

@@ -40,6 +40,7 @@ def read_egrul():
                       new_path + 'dataset/push_mes_egrip.xml']:
         with open(name_file, 'r', encoding="utf-8") as i_f:
             dataf = i_f.read()
+            print(len(dataf))
             # Extracting data using a single split operation
             type_data = dataf.split('ТипИнф="')[1].split('" ВерсПрог=')[0]
             vers_form = dataf.split('ВерсФорм="')[1].split('" ТипИнф=')[0]
@@ -50,10 +51,10 @@ def read_egrul():
             if 'ТипИнф="' in dataf and 'ВерсФорм="' in dataf:
                 type_data = dataf.split('ТипИнф="')[1].split('" ВерсПрог=')[0]
                 vers_form = dataf.split('ВерсФорм="')[1].split('" ТипИнф=')[0]
-                logger.info(
+                print(
                     f"T Y P E   M E S S A G E ================>> {type_data}"
                 )
-                logger.info(
+                print(
                     f"F O R M A T   M E S S A G E ================>> {vers_form}"
                 )
                 # token = get_token(token)
