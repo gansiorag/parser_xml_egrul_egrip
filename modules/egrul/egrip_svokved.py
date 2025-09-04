@@ -8,10 +8,10 @@ Ending 2025//
 
 '''
 
-import sys
+import sys, os
 
-# Add the new path to the system path
-sys.path.append("/opt/airflow2/")
+new_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(new_path + '/')
 
 
 from modules.egrul.com_f import get_zerro_data, get_value, hash_f, write_db

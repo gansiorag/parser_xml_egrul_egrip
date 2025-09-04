@@ -4,12 +4,15 @@ import json
 import logging
 
 
-new_path = "/home/gansior/MyProject/parser_xml_egrul_egrip/"
-sys.path.append(new_path)
+new_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(new_path + '/')
+print(new_path)
+new_path2 = new_path + '/modules/'
+sys.path.append(new_path2)
 
 from modules.egrul.egrul_moduls import parser_mesage_egrul
 from modules.egrul.egrip_moduls import parser_mesage_egrip
-from modules.egrul.com_f import get_codes_fns, get_token
+from modules.egrul.com_f import get_codes_fns
 from modules.egrul.com_f import cnst, get_logger
 from modules.egrul.com_f import all_tables_egrul, all_tables_egrip, get_numb_rows_table
 
@@ -36,8 +39,8 @@ def read_egrul():
     logger.warning("START")
     CODES_FNS = get_codes_fns()
     print('CODES_FNS = >', CODES_FNS)
-    for name_file in [new_path + 'dataset/push_mes_egrul.xml',
-                      new_path + 'dataset/push_mes_egrip.xml']:
+    for name_file in [new_path + '/dataset/egrul/push_mes_egrul.xml',
+                      new_path + '/dataset/egrip/push_mes_egrip.xml']:
         with open(name_file, 'r', encoding="utf-8") as i_f:
             dataf = i_f.read()
             print(len(dataf))

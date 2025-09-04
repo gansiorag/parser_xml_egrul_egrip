@@ -1,7 +1,7 @@
-import sys
+import sys, os
 
-new_path = "/opt/airflow2/"
-sys.path.append(new_path)
+new_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(new_path + '/')
 
 from modules.egrul.com_f import get_zerro_data, write_db
 

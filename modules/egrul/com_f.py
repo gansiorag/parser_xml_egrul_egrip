@@ -85,50 +85,6 @@ all_tables_egrip = [
         's_individual_entrepreneur_tax_authority_registration_info',
         'h_individual_entrepreneur_egrip_main'
     ]
-def get_token(token: dict) -> dict:
-    """Получение токена и проверка его актуальности
-
-    Args:
-        token (dict): {'time_start': '',
-                       'access_token': ''}
-
-    Returns:
-        dict: {'time_start': '',
-               'access_token': ''}
-    """
-    if not token.get("time_start") or token["time_start"] + BORDER > time.time():
-        token["time_start"] = time.time()
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/x-www-form-urlencoded",
-        }
-        grant_type = "client_credentials"
-        client_id = AUTH_CLIENT
-        client_secret = AUTH_PASSWORD
-        print("SSO_ENDPOINT = ", SSO_ENDPOINT)
-        print("AUTH_CLIENT = ", AUTH_CLIENT)
-        print("AUTH_PASSWORD = ", AUTH_PASSWORD)
-        payload = {
-            "client_id": client_id,
-            "client_secret": client_secret,
-            "realm": "/customer",
-            "grant_type": grant_type,
-            "service": "dispatcher",
-        }
-
-        res = requests.post(
-            SSO_ENDPOINT, data=payload, headers=headers, verify=False, timeout=10
-        )
-        if res.status_code == 200:
-            print('I got token!!!')
-        access_token = json.loads(res.content)["access_token"]
-        token['access_token'] = "Bearer sso_1.0_" + access_token
-        print(token['access_token'])
-        return token
-    else:
-        print('token not changes!!!')
-        print(token['access_token'])
-        return token
 
 
 def cnst():
@@ -137,7 +93,6 @@ def cnst():
     Returns:
         _type_: _description_
     """
-    environment = os.environ.get("ENVIRONMENT")
     # out_dict - переменная в которой храняться все константы
     # в зависимости от окружения
     out_dict = {
@@ -159,7 +114,7 @@ def cnst():
         "vers_format_egrul": VERS_FORMAT_EGRUL,
         "format_egrip": f"format_{VERS_FORMAT_EGRIP.replace('.', '_')}",
         "format_egrul": f"format_{VERS_FORMAT_EGRUL.replace('.', '_')}",
-        "environment": os.environ.get("AIRFLOW_ENVIRONMENT"),
+
         "info_out": "",
         "conn_out": "",
         "folder_tmp": os.environ.get("AIRFLOW_TEMP_DIR"),
@@ -205,131 +160,6 @@ def cnst():
             "s_individual_entrepreneur_main_info",
         ],
     }
-
-    out_dict['topic_name'] = f"{environment}.etl.egrul_changes_service.egrul_v3"  # task CORE-11962	load_20250826
-    out_dict['local_file_path'] = (out_dict['path_tmp']
-                                   + out_dict['type_data'] + '/')
-    # Variables for connect with adb
-    print('environment is  ', environment)
-    base_url = os.environ.get("AIRFLOW_CONN_GAR_SEARCH")
-    # base_url = "https://gar-search-svc.reesrtexp:8080"
-    print('base_url is  ', base_url)
-    if environment == 'dev':
-        # 10.5.1.14 sppr2
-        # out_dict['info_out'] - переменная связи с базой куда пишется результат
-        # out_dict['info_out'] = os.environ.get("AIRFLOW_CONN_SANDBOX")
-        out_dict['info_out'] = os.environ.get("AIRFLOW_CONN_SPPR_KORNILIN")
-        out_dict['conn_out'] = (out_dict['info_out'].split('sppr2')[0] +
-                                'gansior?' +
-                                out_dict['info_out'].split('?')[1])
-        out_dict["gar"] = {
-            "headers": {
-                "accept": "application/json",
-                "Authorization": '',
-                "Content-Type": "application/json",
-            },
-            "houses": {
-                "url": f"{base_url}/api/gar/v2/houses",
-                "json_data": {"guid": "", "address_type": "1", "object_guid": ""},
-            },
-            "search": {
-                "url": f"{base_url}/api/gar/v1/search",
-                "json_data": {
-                    "search_string": "",
-                    "limit": 50,
-                    "offset": 0,
-                    "guid": "",
-                    "parent_guid": "",
-                    "address_type": "0",
-                    "size": 5,
-                    "highlight": "",
-                    "parent_name": "",
-                    "number": "",
-                },
-            },
-        }
-        #    'houses': {'url': 'http://gar-search-svc.reesrtexp-dev.d.exportcenter.ru/gar-search/api/gar/v2/houses',
-        #               'json_data': {'guid': '',
-        #                             'address_type': '1',
-        #                             'object_guid': ''
-        #                             }
-        #               },
-        #    'search': {'url': 'http://gar-search-svc.reesrtexp-dev.d.exportcenter.ru/gar-search/api/gar/v1/search',
-        #               'json_data': {'search_string': '',
-        #                             'limit': 50,
-        #                             'offset': 0,
-        #                             'guid': '',
-        #                             'parent_guid': '',
-        #                             'address_type': '0',
-        #                             'size': 5,
-        #                             'highlight': '',
-        #                             'parent_name': '',
-        #                             'number': ''
-        #                             }
-        #               }
-
-    elif environment == "test":
-        out_dict["info_out"] = environment
-        out_dict["conn_out"] = environment
-        out_dict["gar"] = {
-            "headers": {
-                "accept": "application/json",
-                "Authorization": '',
-                "Content-Type": "application/json",
-            },
-            "houses": {
-                "url": "https://lk.t.exportcenter.ru/gar-search/api/gar/v2/houses",
-                "json_data": {"guid": "", "address_type": "1", "object_guid": ""},
-            },
-            "search": {
-                "url": "https://lk.t.exportcenter.ru/gar-search/api/gar/v1/search",
-                "json_data": {
-                    "search_string": "",
-                    "limit": 50,
-                    "offset": 0,
-                    "guid": "",
-                    "parent_guid": "",
-                    "address_type": "0",
-                    "size": 5,
-                    "highlight": "",
-                    "parent_name": "",
-                    "number": "",
-                },
-            },
-        }
-    elif environment == 'preprod':
-        out_dict['info_out'] = environment
-        out_dict['conn_out'] = environment
-        out_dict['gar'] = ' http://gar-search-svc.d.exportcenter.ru/gar-search/api/gar/v2/search'
-    elif environment == "prod":
-        out_dict["info_out"] = environment
-        out_dict["conn_out"] = environment
-        out_dict["gar"] = {
-            "headers": {
-                "accept": "application/json",
-                "Authorization": '',
-                "Content-Type": "application/json",
-            },
-            "houses": {
-                "url": "https://lk.exportcenter.ru/gar-search/api/gar/v2/houses",
-                "json_data": {"guid": "", "address_type": "1", "object_guid": ""},
-            },
-            "search": {
-                "url": "https://lk.exportcenter.ru/gar-search/api/gar/v1/search",
-                "json_data": {
-                    "search_string": "",
-                    "limit": 50,
-                    "offset": 0,
-                    "guid": "",
-                    "parent_guid": "",
-                    "address_type": "0",
-                    "size": 5,
-                    "highlight": "",
-                    "parent_name": "",
-                    "number": "",
-                },
-            },
-        }
     return out_dict
 
 

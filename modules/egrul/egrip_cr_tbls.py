@@ -5,11 +5,11 @@ Author: Gansior Alexander, gansior@gansior.ru, +79173383804
 Starting 2025/08/04
 Ending 2025/08/
 """
-import sys
+import sys, os
 
-# Добавляем путь для подключения modules
-new_path = "/opt/airflow2/"
-sys.path.append(new_path)
+new_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(new_path + '/')
+
 from modules.egrul.com_f import conn_base, get_logger
 
 

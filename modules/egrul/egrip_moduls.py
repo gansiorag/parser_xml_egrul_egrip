@@ -8,11 +8,12 @@ Ending 2025//
 
 '''
 
-import sys
+import sys, os
 import xmltodict as xd
 
-new_path = "/opt/airflow2/"
-sys.path.append(new_path)
+
+new_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(new_path + '/')
 
 from modules.egrul.com_f import xml_clear, hash_f
 from modules.egrul.egrip_adres import address_info_egrip

@@ -1,11 +1,11 @@
 """_summary_"""
 
 import sys, os
-
 import xmltodict as xd
 
-new_path = "/opt/airflow2/"
-sys.path.append(new_path)
+
+new_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(new_path + '/')
 
 from modules.egrul.com_f import xml_clear, get_zerro_data, write_db, hash_f
 from modules.egrul.egrul_adres import address_info
@@ -21,8 +21,6 @@ VERS_FORMAT_EGRUL = CV["vers_format_egrul"]
 FORMAT_EGRUL = CV["format_egrul"]
 
 logger = get_logger()
-
-# task ARCH-772	proba_egrip
 
 
 def work_dict(i_d: dict, base_key: str, name_table: str, base_data: dict):
