@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 sp2 (http://www.altova.com) by SKS (GNIVC FNS RF) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fns="urn://x-artefacts-fns-egrulotn/types/750-14/4.0.1" targetNamespace="urn://x-artefacts-fns-egrulotn/types/750-14/4.0.1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!--==========================================  Структурированные типы  ==========================================-->
+	<xs:complexType name="ВложенияТип">
+		<xs:annotation>
+			<xs:documentation>Сведения о вложениях</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Вложение" type="fns:ВложениеТип" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Описание вложения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ВложениеТип">
+		<xs:annotation>
+			<xs:documentation>Описание вложения</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ИмяФайла" type="fns:string-255">
+				<xs:annotation>
+					<xs:documentation>Имя (идентификатор) файла вложения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ВидФайла">
+				<xs:annotation>
+					<xs:documentation>Вид информации (наименование сведений) файла вложения</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="fns:string-255">
+						<xs:enumeration value="ЕГРЮЛ_ОТКР_СВЕД"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="ТипФайла" type="fns:string-255">
+				<xs:annotation>
+					<xs:documentation>Тип (формат) файла вложения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ФорматФайла" type="fns:string-255" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Версия формата файла вложения (имя схемы, по которой сформирован файл вложения)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ИмяАрхива" type="fns:string-255" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Имя архива, в который упакован файл вложения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="string-255">
+		<xs:annotation>
+			<xs:documentation>Произвольный текст длиной от 1 до 255 символов</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="255"/>
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-36">
+		<xs:annotation>
+			<xs:documentation>Произвольный текст длиной от 1 до 36 символов</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="36"/>
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

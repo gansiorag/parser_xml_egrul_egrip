@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 sp2 (http://www.altova.com) by SKS (GNIVC FNS RF) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn://x-artefacts-fns-egrulotn/root/750-14/4.0.1" xmlns:fnst="urn://x-artefacts-fns-egrulotn/types/750-14/4.0.1" targetNamespace="urn://x-artefacts-fns-egrulotn/root/750-14/4.0.1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="urn://x-artefacts-fns-egrulotn/types/750-14/4.0.1" schemaLocation="./commons/fns-egrulotn-types.xsd"/>
+	<xs:element name="EGRULOTNRequest">
+		<xs:annotation>
+			<xs:documentation>Открытые сведения из ЕГРЮЛ о юридических лицах</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Вложения" type="fnst:ВложенияТип">
+					<xs:annotation>
+						<xs:documentation>Блок сведений о вложении</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="ИдСвед" type="fnst:string-36" use="required">
+				<xs:annotation>
+					<xs:documentation>Идентификатор сведений, сформированный поставщиком</xs:documentation>
+					<xs:documentation>Рекомендуется использовать глобально уникальный идентификатор (GUID)</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="ДатаСвед" use="required">
+				<xs:annotation>
+					<xs:documentation>Дата, на которую сформированы сведения</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:date">
+						<xs:minInclusive value="1900-01-01"/>
+						<xs:maxInclusive value="2099-12-31"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
