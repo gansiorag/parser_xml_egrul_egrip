@@ -18,8 +18,8 @@ import time
 
 # Устанавливаем все константы
 # Устанавливаем форматы ФНС с которыми будем работать
-VERS_FORMAT_EGRIP = "format_4.06"
-VERS_FORMAT_EGRUL = "format_4.07"
+VERS_FORMAT_EGRIP = "4.06"
+VERS_FORMAT_EGRUL = "4.07"
 
 # Значение полей которые приходят в СМЭВ
 # для идентификации набора сведений
@@ -382,7 +382,8 @@ def get_conn():
     Returns:
         _type_: _description_
     """
-    conn = sqlite3.connect('/home/gansior/MyProject/parser_xml_egrul_egrip/dataset/egrul_egrip.db')
+    new_path = os.path.dirname(os.path.abspath(__file__)) + '/dataset/egrul_egrip.db'
+    conn = sqlite3.connect(new_path)
     return conn
 
 
@@ -392,7 +393,9 @@ def get_connect():
     Returns:
         _type_: _description_
     """
-    conn = sqlite3.connect('/home/gansior/MyProject/parser_xml_egrul_egrip/dataset/egrul_egrip.db')
+    new_path = os.path.dirname(os.path.abspath(__file__)).split('/modules/egrul')[0] + '/dataset/egrul_egrip.db'
+    print(new_path)
+    conn = sqlite3.connect(new_path)
     curs = conn.cursor()
     return conn, curs
 
@@ -416,13 +419,13 @@ def get_zerro_data(fformat, name_tbl, erul_egrip):
         sql = (
             f"SELECT name_fld, {fformat} "
             f"FROM formats_egrul_fni "
-            f"WHERE name_tbl = '{name_tbl}' and is_active_{fformat} = TRUE"
+            f"WHERE name_tbl = '{name_tbl}' and is_active_{fformat} = 'true'"
         )
     if erul_egrip == "EGRIP":
         sql = (
             f"SELECT name_fld, {fformat} "
             f"FROM formats_egrip_fni "
-            f"WHERE name_tbl = '{name_tbl}' and is_active_{fformat} = TRUE"
+            f"WHERE name_tbl = '{name_tbl}' and is_active_{fformat} = 'true'"
         )
     curs.execute(sql)
     rows = curs.fetchall()
@@ -484,7 +487,7 @@ def write_db(data: dict, schema: str, name_tbl: str):
     if key_write:
         conn, curs = get_connect()
         k = 0
-        str_first = f"INSERT INTO {schema}.{name_tbl} ("
+        str_first = f"INSERT INTO {name_tbl} ("
         str_second = "VALUES("
 
         print(f"write_db data ==> {data}")
@@ -539,7 +542,7 @@ def write_adress_fias_mapping(data: dict, schema: str):
     if data['adr_uuid']:
         conn, curs = get_connect()
         entity_id = hash_f(data['adr_uuid'] + data['adr_fias_f'])
-        str_first = f"INSERT INTO {schema}.{name_tbl} (entity_id, fias_standardized_address, fias_guid, hash_diff) "
+        str_first = f"INSERT INTO {name_tbl} (entity_id, fias_standardized_address, fias_guid, hash_diff) "
         str_second = f"""VALUES('{entity_id}','{data["adr_fias_f"]}','{hash_f(data["adr_uuid"])}', '{entity_id}');"""
         try:
             curs.execute(str_first + str_second)
@@ -560,7 +563,7 @@ def get_codes_fns():
         list: список кодов относящиеся к ликвидации
     """
     conn, cur = get_connect()
-    sql = 'SELECT cod_fns FROM codes_fns where is_active = true;'
+    sql = 'SELECT cod_fns FROM codes_fns where is_active = "true";'
     cur.execute(sql)
     coddes = cur.fetchall()
     print(coddes)

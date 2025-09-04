@@ -270,10 +270,10 @@ def parser_svul(doc_source: dict, codes_fns: list, cv: dict):
                 address_info(doc_source["СвАдресЮЛ"], FORMAT_EGRUL,
                              EGRUL, base_data, cv)
     # Таблицы которые парсятся одним способом
-    for n_t in cv["tabl_egrul"]:
-        common_write_one(isd, FORMAT_EGRUL, n_t, EGRUL,
-                         base_data,
-                         CV['schema_get'])
+    # for n_t in cv["tabl_egrul"]:
+    #     common_write_one(isd, FORMAT_EGRUL, n_t, EGRUL,
+    #                      base_data,
+    #                      CV['schema_get'])
 
 
 def parser_mesage_egrul(mess_i, codes_fns: list, cv: dict):
@@ -298,7 +298,7 @@ def parser_mesage_egrul(mess_i, codes_fns: list, cv: dict):
         # Определяем тип данных type_data  и версию формата vers_form
         # type_data = mess_i.split('ТипИнф="')[1].split('" ВерсПрог=')[0]
         vers_form = mess_i.split('ВерсФорм="')[1].split('" ТипИнф=')[0]
-
+        print(vers_form, VERS_FORMAT_EGRUL)
         if vers_form == VERS_FORMAT_EGRUL:
             rez_clear = xml_clear(mess_i)
             rez_dict = xd.parse(rez_clear)

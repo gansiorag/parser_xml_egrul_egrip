@@ -3,7 +3,12 @@ import sys, os
 new_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(new_path + '/')
 
-from modules.egrul.com_f import get_zerro_data, write_db, get_gar, get_gar_id, write_adress_fias_mapping
+from modules.egrul.com_f import (get_zerro_data,
+                                 write_db,
+                                 get_gar,
+                                 get_gar_id,
+                                 write_adress_fias_mapping,
+                                 hash_f)
 
 NAME_TBL_FIAS = 's_local_company_address_fias_info'
 NAME_TBL_ARF = 's_local_company_address_info'
@@ -171,14 +176,18 @@ def adr_rf(i_d, fformat, egrul_egrip, base_data: dict, cv: dict, schema):
         full_addr = full_addr + ", " + dd["svadresul_adresrf_dom"]["value"]
     if dd["svadresul_adresrf_korpus"]["value"]:
         full_addr = full_addr + ", " + dd["svadresul_adresrf_korpus"]["value"]
-    full_addr = full_addr.replace(' , ' , '')
+    full_addr = full_addr.replace(' , ', '')
     print("full_addr == > ", full_addr)
-    adr_uuid, adr_fias_f = get_gar(full_addr, cv)
-    data_fias = {'adr_uuid': adr_uuid,
-                 'adr_fias_f': adr_fias_f}
+    # adr_uuid, adr_fias_f = get_gar(full_addr, cv)
+    # data_fias = {'adr_uuid': adr_uuid,
+    #              'adr_fias_f': adr_fias_f}
+    data_fias = {'adr_uuid': hash_f(full_addr),
+                 'adr_fias_f': full_addr}
     write_adress_fias_mapping(data_fias, schema)
-    dd["hierarchy_fulltext"] = adr_uuid
-    dd["fias_guid"] = adr_fias_f
+    # dd["hierarchy_fulltext"] = adr_uuid
+    # dd["fias_guid"] = adr_fias_f
+    dd["hierarchy_fulltext"] = hash_f(full_addr)
+    dd["fias_guid"] = full_addr
     print(dd)
     return dd
 
@@ -368,46 +377,48 @@ def adr_fias(i_d, fformat, egrul_egrip, base_data: dict, cv:dict, schema: str):
                     dd[ff]["value"] = s_data3["@НаимРегион"]
                 case 'СвЮЛ^СвАдресЮЛ^СвРешИзмМН^@ТипРегион':
                     dd[ff]["value"] = s_data3["@ТипРегион"]
-    if dd['svadresul_adresfias_idnom']["value"]:
-        adr_uuid, adr_fias_f = get_gar_id(
-            dd['svadresul_adresfias_idnom']["value"],
-            cv)
-    else:
-        full_addr = (
-            dd['svadresul_adresfias_indeks']["value"]
-            + ", "
-            + dd["svadresul_adresfias_region_naimregion"]["value"]
-            + ", "
-            + dd['svadresul_adresfias_gorodselposel_vidcod']["value"]
-            + " "
-            + dd['svadresul_adresfias_gorodselposel_naimgorod']["value"]
-            + ", "
-            + dd['svadresul_adresfias_naselpunkt_vid']["value"]
-            + " "
-            + dd['svadresul_adresfias_naselpunkt_naimnaselpunkt']["value"]
-            + ", "
-            + dd['svadresul_adresfias_rajon_vidkod']["value"]
-            + " "
-            + dd['svadresul_adresfias_rajon_naimrajon']["value"]
-            + ", "
-            + dd['svadresul_adresfias_elplanstruktur_tip']["value"]
-            + " "
-            + dd['svadresul_adresfias_elplanstruktur_naim']["value"]
-            + ", "
-            + dd['svadresul_adresfias_eluldorseti_tip']["value"]
-            + " "
-            + dd['svadresul_adresfias_eluldorseti_naim']["value"]
-        )       
-        if dd['svadresul_adresfias_pomeszdania_tip']["value"]:
-            full_addr = full_addr + ", " + dd['svadresul_adresfias_pomeszdania_tip']["value"]
-        if dd['svadresul_adresfias_pomeskvart_nomer']["value"]:
-            full_addr = full_addr + " " + dd['svadresul_adresfias_pomeskvart_nomer']["value"]
-        print("full_addr == > ", full_addr)
-        adr_uuid, adr_fias_f = get_gar(full_addr, cv)
-    dd["fias_guid"] = adr_uuid
-    dd["hierarchy_fulltext"] = adr_fias_f
+    # if dd['svadresul_adresfias_idnom']["value"]:
+    #     adr_uuid, adr_fias_f = get_gar_id(
+    #         dd['svadresul_adresfias_idnom']["value"],
+    #         cv)
+    # else:
+    full_addr = (
+        dd['svadresul_adresfias_indeks']["value"]
+        + ", "
+        + dd["svadresul_adresfias_region_naimregion"]["value"]
+        + ", "
+        + dd['svadresul_adresfias_gorodselposel_vidcod']["value"]
+        + " "
+        + dd['svadresul_adresfias_gorodselposel_naimgorod']["value"]
+        + ", "
+        + dd['svadresul_adresfias_naselenpunkt_vid']["value"]
+        + " "
+        + dd['svadresul_adresfias_naselenpunkt_naim']["value"]
+        + ", "
+        + dd['svadresul_adresfias_municipraion_vidkod']["value"]
+        + " "
+        + dd['svadresul_adresfias_municipraion_naim']["value"]
+        + ", "
+        + dd['svadresul_adresfias_elplanstruktur_tip']["value"]
+        + " "
+        + dd['svadresul_adresfias_elplanstruktur_naim']["value"]
+        + ", "
+        + dd['svadresul_adresfias_eluldorseti_tip']["value"]
+        + " "
+        + dd['svadresul_adresfias_eluldorseti_naim']["value"]
+    )
+    if dd['svadresul_adresfias_pomeszdania_tip']["value"]:
+        full_addr = full_addr + ", " + dd['svadresul_adresfias_pomeszdania_tip']["value"]
+    if dd['svadresul_adresfias_pomeskvart_nomer']["value"]:
+        full_addr = full_addr + " " + dd['svadresul_adresfias_pomeskvart_nomer']["value"]
+    print("full_addr == > ", full_addr)
+    # adr_uuid, adr_fias_f = get_gar(full_addr, cv)
+    # dd["fias_guid"] = adr_uuid
+    # dd["hierarchy_fulltext"] = adr_fias_f
+    dd["fias_guid"] = hash_f(full_addr)
+    dd["hierarchy_fulltext"] = full_addr   
     data_fias = {'adr_uuid': dd["fias_guid"],
-                'adr_fias_f': dd["hierarchy_fulltext"]}
+                 'adr_fias_f': dd["hierarchy_fulltext"]}
     write_adress_fias_mapping(data_fias, schema)
     return dd
 

@@ -273,7 +273,7 @@ def parser_svip(doc_source, rez_dict: dict, CODES_FNS: list):
                          base_data, CV['schema_get'])
 
 
-def parser_mesage_egrip(mess_i, codes_fns: list, token: str):
+def parser_mesage_egrip(mess_i, codes_fns: list, cv: dict):
     """_summary_
 
     Args:

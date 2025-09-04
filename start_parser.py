@@ -55,17 +55,17 @@ def read_egrul():
                 type_data = dataf.split('ТипИнф="')[1].split('" ВерсПрог=')[0]
                 vers_form = dataf.split('ВерсФорм="')[1].split('" ТипИнф=')[0]
                 print(
-                    f"T Y P E   M E S S A G E ================>> {type_data}"
+                    f"T Y P E   D A T A ================>> {type_data}"
                 )
                 print(
-                    f"F O R M A T   M E S S A G E ================>> {vers_form}"
+                    f"F O R M A T   D A T A ================>> {vers_form}"
                 )
                 # token = get_token(token)
                 # CV["gar"]["headers"]["Authorization"] = token["access_token"]
                 if type_data == INPUT_EGRUL and vers_form == VERS_FORMAT_EGRUL:
                     parser_mesage_egrul(dataf, CODES_FNS, CV)
-                if type_data == INPUT_EGRIP and vers_form == VERS_FORMAT_EGRIP:
-                    parser_mesage_egrip(dataf, CODES_FNS, CV)
+                # if type_data == INPUT_EGRIP and vers_form == VERS_FORMAT_EGRIP:
+                #     parser_mesage_egrip(dataf, CODES_FNS, CV)
             else:
                 logger.warning(
                     "Message format is incorrect or missing required fields."
