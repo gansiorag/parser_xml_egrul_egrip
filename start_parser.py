@@ -39,8 +39,11 @@ def read_egrul():
     logger.warning("START")
     CODES_FNS = get_codes_fns()
     print('CODES_FNS = >', CODES_FNS)
-    for name_file in [new_path + '/dataset/egrul/push_mes_egrul.xml',
-                      new_path + '/dataset/egrip/push_mes_egrip.xml']:
+    for name_file in [
+        #  new_path + '/dataset/egrul/push_mes_egrul.xml',
+        # #  new_path + '/dataset/egrip/push_mes_egrip.xml'
+        new_path + '/dataset/egrul/error_push_egrul.xml'
+                      ]:
         with open(name_file, 'r', encoding="utf-8") as i_f:
             dataf = i_f.read()
             print(len(dataf))
