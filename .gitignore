@@ -3,3 +3,5 @@
 modules/egrul/__pycache__/
 __pycache__/
 .venv_egrul/
+.vscode/settings.json
+modules/__pycache__/
