@@ -1,5 +1,6 @@
 import os, sys
 
+# Add path to modules in system
 new_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(new_path + '/')
 print(new_path)
