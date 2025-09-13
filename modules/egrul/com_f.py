@@ -12,8 +12,6 @@ import sqlite3
 import hashlib
 import logging
 import requests
-import json
-import time
 
 
 # Устанавливаем все константы
@@ -110,10 +108,10 @@ def cnst():
         "egrip": "EGRIP",
         "input_egrul": INPUT_EGRUL,
         "input_egrip": INPUT_EGRIP,
-        "vers_format_egrip": VERS_FORMAT_EGRIP,
-        "vers_format_egrul": VERS_FORMAT_EGRUL,
-        "format_egrip": f"format_{VERS_FORMAT_EGRIP.replace('.', '_')}",
-        "format_egrul": f"format_{VERS_FORMAT_EGRUL.replace('.', '_')}",
+        "vers_format_egrip": '',
+        "vers_format_egrul": '',
+        "format_egrip": '',
+        "format_egrul": '',
 
         "info_out": "",
         "conn_out": "",
@@ -566,7 +564,7 @@ def get_codes_fns():
     sql = 'SELECT cod_fns FROM codes_fns where is_active = "true";'
     cur.execute(sql)
     coddes = cur.fetchall()
-    print(coddes)
+    print("get_codes_fns")
     rezz = [item[0] for item in coddes]
     conn.close()
     return rezz
@@ -630,7 +628,7 @@ def get_logger():
     Returns:
         _type_: _description_
     """
-    logger = logging.getLogger("DAG_CREATE_ALL_TABLES_IMF_WB")
+    logger = logging.getLogger("Parser - ")
     console_handler = logging.StreamHandler()
     # console_handler.setLevel(logging.DEBUG)
     console_handler.setLevel(logging.INFO)

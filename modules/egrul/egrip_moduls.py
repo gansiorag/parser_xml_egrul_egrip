@@ -13,7 +13,9 @@ import xmltodict as xd
 
 
 new_path = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(new_path + '/')
+new_path = new_path.split('modules')[0]
+print(new_path)
+sys.path.append(new_path + 'modules')
 
 from modules.egrul.com_f import xml_clear, hash_f
 from modules.egrul.egrip_adres import address_info_egrip
@@ -23,11 +25,11 @@ from modules.egrul.com_f import cnst, get_logger, common_write_one
 
 
 # Устанавливаем все константы
-CV = cnst()
-EGRIP = CV["egrip"]
-INPUT_EGRIP = CV["input_egrip"]
-VERS_FORMAT_EGRIP = CV["vers_format_egrip"]
-FORMAT_EGRIP = CV["format_egrip"]
+# CV = cnst()
+# EGRIP = CV["egrip"]
+# INPUT_EGRIP = CV["input_egrip"]
+# VERS_FORMAT_EGRIP = CV["vers_format_egrip"]
+# FORMAT_EGRIP = CV["format_egrip"]
 
 # task ARCH-623 common
 # task ARCH-772	proba_egrip
@@ -143,7 +145,7 @@ def process_list_egrip(l_d: list, b_key: str, n_t: str, base_data: dict):
 # task ARCH-772	proba_egrip
 
 
-def parser_svip(doc_source, rez_dict: dict, CODES_FNS: list):
+def parser_svip(doc_source, rez_dict: dict, CODES_FNS: list, CV):
     """_summary_
 
     Args:
@@ -155,7 +157,7 @@ def parser_svip(doc_source, rez_dict: dict, CODES_FNS: list):
     isd = {"СвИП": doc_source}
 
     base_data = {
-        "rec_src": EGRIP,
+        "rec_src": CV['egrip'],
         "statement_dt": doc_source["@ДатаВып"],
         "individual_entrepreneur_pk": hash_f(doc_source["@ОГРНИП"]),
         "ogrnip": doc_source["@ОГРНИП"],
@@ -163,8 +165,8 @@ def parser_svip(doc_source, rez_dict: dict, CODES_FNS: list):
     }
 
     common_write_one(
-        isd, FORMAT_EGRIP, "h_individual_entrepreneur_egrip_main",
-        EGRIP, base_data, CV['schema_get']
+        isd, CV['format_egrip'], "h_individual_entrepreneur_egrip_main",
+        CV['egrip'], base_data, CV['schema_get']
     )  # checked
 
     for kk in doc_source:
@@ -268,59 +270,64 @@ def parser_svip(doc_source, rez_dict: dict, CODES_FNS: list):
                     base_data,
                 )
     # Таблицы которые парсятся одним способом
-    for n_t in CV['tabl_egrip']:
-        common_write_one(isd, FORMAT_EGRIP, n_t, EGRIP,
-                         base_data, CV['schema_get'])
+    # for n_t in CV['tabl_egrip']:
+    #     common_write_one(isd, FORMAT_EGRIP, n_t, EGRIP,
+    #                      base_data, CV['schema_get'])
 
 
-def parser_mesage_egrip(mess_i, codes_fns: list, cv: dict):
-    """_summary_
+def parse_egrip_message(message: str, codes_fns: list, config: dict) -> None:
+    """
+    Parse and process an EGRIP XML message.
 
     Args:
-        message (_type_): _description_
-        cur (_type_): _description_
-        logger (_type_): _description_
+        message (str): The raw XML message string.
+        codes_fns (list): List of codes for FNS processing.
+        config (dict): Configuration dictionary containing formats, schemas, etc.
     """
-    # try:
-    # Первичная информация о сообщении
-    print("EGRIP message!!!!")
-    print(f"Message length: {len(mess_i)}")
-    logger.debug(codes_fns)
-    print("Processing message...")
-    # Process the message
-    # Определяем версию формата vers_form
-    vers_form = mess_i.split('ВерсФорм="')[1].split('" ТипИнф=')[0]
+    print("Processing EGRIP message")
+    print(f"Message length: {len(message)}")
+    logger.debug(f"Codes FNS count: {len(codes_fns)}")
 
-    if vers_form == VERS_FORMAT_EGRIP:
-        # Убераем недопустимые символы
-        rez_clear = xml_clear(mess_i)
-        # Преобразуем xml в словарь
-        rez_dict = xd.parse(rez_clear)
-        num_doc = 0
+    try:
+        # Clear invalid characters from XML
+        cleaned_xml = xml_clear(message)
+        # Parse XML to dictionary
+        xml_dict = xd.parse(cleaned_xml)
+    except Exception as e:
+        logger.error(f"Failed to parse EGRIP XML: {e}")
+        return
 
-        # Сообщения могут приходить только с одним документом тогда
-        # rez_dict["Файл"]["Документ"] - это словарь
-        # если несколько документов то список.
-        # Определяем это
+    num_docs = 0
 
-        documents = rez_dict["Файл"]["Документ"]
+    # Extract documents; handle single dict or list
+    if "Файл" not in xml_dict:
+        logger.warning("No 'Файл' key in XML dictionary")
+        return
+    file_content = xml_dict["Файл"]
+    if "Документ" not in file_content:
+        logger.warning("No 'Документ' key in file content")
+        return
 
-        # Обрабатываем документ(ы) одинаково, в зависимости от типа
-        if isinstance(documents, list):
-            print(f'=== Документов {len(documents)} в списке ')
-            for dd in documents:
-                num_doc += 1
-                print(f'=== Документ {num_doc} === from {len(documents)}')
-                logger.debug('step 1 egrip', dd)
-                if "СвИП" in dd:
-                    doc_source = dd["СвИП"]
-                    new_d = {"Файл": {"Документ": {"СвИП": doc_source}}}
-                    parser_svip(doc_source, new_d, codes_fns)
-        elif isinstance(documents, dict):
-            num_doc += 1
-            print(f"=== Документ {num_doc} === from dict")
-            if "СвИП" in documents:
-                parser_svip(documents["СвИП"], rez_dict, codes_fns)
+    documents = file_content["Документ"]
 
-    # except Exception as process_error:
-    #     logger.error(f"Error processing message: {process_error}")
+    def _process_document(doc: dict):
+        nonlocal num_docs
+        if "СвИП" not in doc:
+            logger.warning("No 'СвИП' in document, skipping")
+            return
+        doc_source = doc["СвИП"]
+        logger.debug(f"Processing SvIP document: {doc_source.get('@ОГРНИП', 'Unknown')}")
+        parser_svip(doc_source, xml_dict, codes_fns, config)
+        num_docs += 1
+
+    # Handle multiple or single document
+    if isinstance(documents, list):
+        print(f"Found {len(documents)} documents in list")
+        for doc in documents:
+            _process_document(doc)
+            print(f"Processed document {num_docs}")
+    elif isinstance(documents, dict):
+        print("Found single document")
+        _process_document(documents)
+    else:
+        logger.warning(f"Unexpected document type: {type(documents)}")
