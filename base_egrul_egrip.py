@@ -22,8 +22,7 @@ CV = cnst()
 
 class Egrul_egrip:
 
-    def __init__(self, vers_format_egrip= "4.06",
-                  vers_format_egrul= "4.07") -> None:
+    def __init__(self, vers_format_egrip="4.06", vers_format_egrul="4.07") -> None:
         self.path_file = ()
         self.vers_format_egrip = vers_format_egrip
         self.vers_format_egrul = vers_format_egrul
@@ -34,8 +33,7 @@ class Egrul_egrip:
         CV["input_egrip"] = "ЕГРИП_ОТКР_СВЕД"
         CV["input_egrul"] = "ЕГРЮЛ_ОТКР_СВЕД"
 
-
-    def read_egrul_egrip_file_xml(self, name_file ):
+    def read_egrul_egrip_file_xml(self, name_file):
         """Read from file"""
         print("START")
         CODES_FNS = get_codes_fns()
@@ -44,15 +42,15 @@ class Egrul_egrip:
             dataf = i_f.read()
             print(f"len(dataf {len(dataf)}")
             # Extracting data using a single split operation
-            if '<ЕГРИП>' in dataf:
-                dataf = dataf.replace('<ЕГРИП>', '<Файл><Документ>')
-                dataf = dataf.replace('</ЕГРИП>', '</Документ></Файл>')
+            if "<ЕГРИП>" in dataf:
+                dataf = dataf.replace("<ЕГРИП>", "<Файл><Документ>")
+                dataf = dataf.replace("</ЕГРИП>", "</Документ></Файл>")
                 parse_egrip_message(dataf, CODES_FNS, CV)
-            elif '<ЕГРЮЛ>'  in dataf:
-                dataf = dataf.replace('<ЕГРЮЛ>', '<Файл><Документ>')
-                dataf = dataf.replace('</ЕГРЮЛ>', '</Документ></Файл>')
+            elif "<ЕГРЮЛ>" in dataf:
+                dataf = dataf.replace("<ЕГРЮЛ>", "<Файл><Документ>")
+                dataf = dataf.replace("</ЕГРЮЛ>", "</Документ></Файл>")
                 parse_egrip_message(dataf, CODES_FNS, CV)
-            elif '<?xml'  in dataf:
+            elif "<?xml" in dataf:
                 type_data = dataf.split('ТипИнф="')[1].split('" ВерсПрог=')[0]
                 vers_form = dataf.split('ВерсФорм="')[1].split('" ТипИнф=')[0]
                 kol_doc = int(dataf.split('КолДок="')[1].split('">')[0].strip())
@@ -67,13 +65,16 @@ class Egrul_egrip:
                     print(f"F O R M A T   D A T A ================>> {vers_form}")
                     # token = get_token(token)
                     # CV["gar"]["headers"]["Authorization"] = token["access_token"]
-                    if type_data == CV["input_egrul"] and vers_form == CV["vers_format_egrul"]:
+                    if (
+                        type_data == CV["input_egrul"]
+                        and vers_form == CV["vers_format_egrul"]
+                    ):
                         parser_mesage_egrul(dataf, CODES_FNS, CV)
-                    if type_data == CV["input_egrip"] and vers_form == CV["vers_format_egrip"]:
+                    if (
+                        type_data == CV["input_egrip"]
+                        and vers_form == CV["vers_format_egrip"]
+                    ):
                         parse_egrip_message(dataf, CODES_FNS, CV)
             else:
-                print(
-                    "Message format is incorrect or missing required fields."
-                )
+                print("Message format is incorrect or missing required fields.")
                 print("Error dataf ===>>>", dataf)
-
