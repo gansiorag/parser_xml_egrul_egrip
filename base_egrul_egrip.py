@@ -8,7 +8,7 @@ print(new_path)
 new_path2 = new_path + "/modules/"
 sys.path.append(new_path2)
 
-from modules.egrul.egrul_moduls import parser_mesage_egrul
+from modules.egrul.egrul_moduls import parser_egrul_mesage
 from modules.egrul.egrip_moduls import parse_egrip_message
 from modules.egrul.com_f import get_codes_fns
 from modules.egrul.com_f import cnst, get_logger
@@ -33,7 +33,7 @@ class Egrul_egrip:
         CV["input_egrip"] = "ЕГРИП_ОТКР_СВЕД"
         CV["input_egrul"] = "ЕГРЮЛ_ОТКР_СВЕД"
 
-    def read_egrul_egrip_file_xml(self, name_file):
+    def read_egrul_egrip_file_xml(self, name_file: str, razd: list):
         """Read from file"""
         print("START")
         CODES_FNS = get_codes_fns()
@@ -49,7 +49,7 @@ class Egrul_egrip:
             elif "<ЕГРЮЛ>" in dataf:
                 dataf = dataf.replace("<ЕГРЮЛ>", "<Файл><Документ>")
                 dataf = dataf.replace("</ЕГРЮЛ>", "</Документ></Файл>")
-                parse_egrip_message(dataf, CODES_FNS, CV)
+                parser_egrul_mesage(dataf, CODES_FNS, CV, razd)
             elif "<?xml" in dataf:
                 type_data = dataf.split('ТипИнф="')[1].split('" ВерсПрог=')[0]
                 vers_form = dataf.split('ВерсФорм="')[1].split('" ТипИнф=')[0]
@@ -69,7 +69,7 @@ class Egrul_egrip:
                         type_data == CV["input_egrul"]
                         and vers_form == CV["vers_format_egrul"]
                     ):
-                        parser_mesage_egrul(dataf, CODES_FNS, CV)
+                        parser_egrul_mesage(dataf, CODES_FNS, CV, razd)
                     if (
                         type_data == CV["input_egrip"]
                         and vers_form == CV["vers_format_egrip"]
