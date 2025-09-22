@@ -13,13 +13,15 @@ from base_egrul_egrip import Egrul_egrip
 if __name__ == '__main__':
     b_egr = Egrul_egrip()
     # list_razd = [['Файл', 'Документ', 'СвЮЛ', 'СвАдресЮЛ',	'АдресРФ']]
-    list_razd = []
+    # list_razd = [['Файл', 'Документ', 'СвЮЛ', 'СвАдресЮЛ',	'АдресРФ', 'Город']]
+    list_razd = [['Файл', 'Документ', 'СвЮЛ']]
+    # list_razd = []
     for name_file in [
-        # os.path.join(new_path, 'dataset', 'egrul', 'push_mes_egrul.xml'),
+        os.path.join(new_path, 'dataset', 'egrul', 'push_mes_egrul.xml'),
         # os.path.join(new_path, 'dataset', 'egrip', 'push_mes_egrip.xml')
         # os.path.join(new_path, 'dataset', 'egrul', 'error_push_egrul.xml')
         # os.path.join(new_path, 'dataset', 'egrip', '304010131600079.xml')
-        os.path.join(new_path, 'dataset', 'egrip', '323420500054722_error.xml')
+        # os.path.join(new_path, 'dataset', 'egrip', '323420500054722_error.xml')
     ]:
         if list_razd:
             for razd in list_razd:

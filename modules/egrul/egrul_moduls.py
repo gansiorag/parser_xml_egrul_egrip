@@ -5,7 +5,7 @@ import xmltodict as xd
 
 
 new_path = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(new_path + '/')
+sys.path.append(new_path + "/")
 
 from modules.egrul.com_f import xml_clear, get_zerro_data, write_db, hash_f
 from modules.egrul.egrul_adres import address_info
@@ -46,9 +46,9 @@ def work_dict(i_d: dict, base_key: str, name_table: str, base_data: dict):
             for nm_ff in document[base_key][nm_f]:
                 print(nm_ff)
                 isd_dd = {"СвЮЛ": {base_key: {nm_f: nm_ff, **common_data}}}
-                common_write_one(isd_dd, FORMAT_EGRUL, name_table,
-                                 EGRUL,
-                                 base_data, CV['schema_get'])
+                common_write_one(
+                    isd_dd, FORMAT_EGRUL, name_table, EGRUL, base_data, CV["schema_get"]
+                )
         elif isinstance(document[base_key][nm_f], dict):
             print("dict 2", base_key, nm_f)
             print(document[base_key][nm_f])
@@ -56,9 +56,9 @@ def work_dict(i_d: dict, base_key: str, name_table: str, base_data: dict):
                 "СвЮЛ": {base_key: {nm_f: document[base_key][nm_f]}, **common_data}
             }
             print(isd_dd)
-            common_write_one(isd_dd, FORMAT_EGRUL, name_table,
-                             EGRUL,
-                             base_data, CV['schema_get'])
+            common_write_one(
+                isd_dd, FORMAT_EGRUL, name_table, EGRUL, base_data, CV["schema_get"]
+            )
         elif isinstance(document[base_key][nm_f], str):
             print("dict 3", base_key, nm_f)
             base_dict = 1
@@ -66,9 +66,9 @@ def work_dict(i_d: dict, base_key: str, name_table: str, base_data: dict):
     if base_dict == 1:
         isd_dd = {"СвЮЛ": {base_key: document[base_key], **common_data}}
         print(isd_dd)
-        common_write_one(isd_dd, FORMAT_EGRUL, name_table,
-                         EGRUL,
-                         base_data, CV['schema_get'])
+        common_write_one(
+            isd_dd, FORMAT_EGRUL, name_table, EGRUL, base_data, CV["schema_get"]
+        )
 
 
 def process_list2(l_d: list, b_key: str, n_t: str, i_d, base_data: dict):
@@ -96,8 +96,9 @@ def process_list2(l_d: list, b_key: str, n_t: str, i_d, base_data: dict):
                     "@ДатаВып": i_d["@ДатаВып"],
                 }
             }
-            common_write_one(isd_dd, FORMAT_EGRUL, n_t, EGRUL,
-                             base_data, CV['schema_get'])
+            common_write_one(
+                isd_dd, FORMAT_EGRUL, n_t, EGRUL, base_data, CV["schema_get"]
+            )
             for nm_ff in nm_f:
                 print(nm_ff, " ->", nm_f[nm_ff])
 
@@ -131,8 +132,9 @@ def process_list(l_d: list, b_key: str, n_t: str, base_data: dict):
                     "@ДатаВып": base_data["statement_dt"],
                 }
             }
-            common_write_one(isd_dd, FORMAT_EGRUL, n_t, EGRUL,
-                             base_data, CV['schema_get'])
+            common_write_one(
+                isd_dd, FORMAT_EGRUL, n_t, EGRUL, base_data, CV["schema_get"]
+            )
             for nm_ff in nm_f:
                 print(nm_ff, " ->", nm_f[nm_ff])
 
@@ -146,7 +148,7 @@ def parser_svul(doc_source: dict, codes_fns: list, cv: dict):
         cur (_type_): _description_
         logger (_type_): _description_
     """
-    print('Start parser_svul .')
+    print("Start parser_svul .")
     k_s_z = 0
     isd = {"СвЮЛ": doc_source}
     base_data = {
@@ -158,9 +160,12 @@ def parser_svul(doc_source: dict, codes_fns: list, cv: dict):
     }
 
     common_write_one(
-        isd, FORMAT_EGRUL, "h_local_company_egrul_main",
+        isd,
+        FORMAT_EGRUL,
+        "h_local_company_egrul_main",
         EGRUL,
-        base_data, CV['schema_get']
+        base_data,
+        CV["schema_get"],
     )  # checked
 
     for kk in doc_source:
@@ -267,8 +272,9 @@ def parser_svul(doc_source: dict, codes_fns: list, cv: dict):
             #                          CV['schema_get'])
             #             k_s_z += 1
             case "СвАдресЮЛ":
-                address_info(doc_source["СвАдресЮЛ"], FORMAT_EGRUL,
-                             EGRUL, base_data, cv)
+                address_info(
+                    doc_source["СвАдресЮЛ"], FORMAT_EGRUL, EGRUL, base_data, cv
+                )
     # Таблицы которые парсятся одним способом
     # for n_t in cv["tabl_egrul"]:
     #     common_write_one(isd, FORMAT_EGRUL, n_t, EGRUL,
@@ -276,22 +282,43 @@ def parser_svul(doc_source: dict, codes_fns: list, cv: dict):
     #                      CV['schema_get'])
 
 
-def deep_get(d, keys, default=None):
+def work_list(data_list: list, key: str, i: int,  pr):
+    if pr == 0:
+        print(f"Подраздел - {key} это список !")
+        print("Поля одного item списка.")
+        for dk in data_list[0]:
+            if isinstance(data_list[0][dk], str):
+                print(f"Подраздел - {dk} {type(data_list[0][dk])}")
+            if isinstance(data_list[0][dk], dict):
+                print(dk, i)
+                for ddkk in data_list[0][dk]:
+                    # print(f"Подраздел - {ddkk}")
+                    print(f"Подраздел - {ddkk} {type(data_list[0][dk][ddkk])}")
+                    pr = 1
+                    # d, pr = deep_get(d[key][0][dk], keys[i:], pr)    
+    return data_list[0], pr
+
+
+def deep_get(d, keys, pr=0, default=None):
     """
     Рекурсивное получение значения с поддержкой списков.
     """
 
-    for key in keys:
+    for i, key in enumerate(keys):
         if (key in d) and isinstance(d[key], dict):
-            print(key)
+            # print(key)
             # print('d[key] = ', d[key].keys())
-            d = deep_get(d[key], keys)
+
+            if key == keys[-1] and pr == 0:
+                print(f"Раздел {'^'.join(keys)}")
+                for dk in d[key]:
+                    print(f"Подраздел - {dk} {type(d[key][dk])}")
+                pr = 1
+            else:
+                d, pr = deep_get(d[key], keys, pr)
         elif (key in d) and isinstance(d[key], list):
-            for dd in d[key]:
-               d_l = deep_get(dd, keys)
-               print(d_l)
-               print()
-    return d
+            d, pr = work_list(d[key], key, i,  pr)
+    return d, pr
 
 
 def parser_egrul_mesage(mess_i, codes_fns: list, cv: dict, razd: list):
@@ -312,15 +339,14 @@ def parser_egrul_mesage(mess_i, codes_fns: list, cv: dict, razd: list):
     VERS_FORMAT_EGRUL = cv["vers_format_egrul"]
     if mess_i:
         print("Processing message...")
-        
 
         # print(mess_i)
         # Process the message
         # Определяем тип данных type_data  и версию формата vers_form
         # type_data = mess_i.split('ТипИнф="')[1].split('" ВерсПрог=')[0]
         vers_form = mess_i.split('ВерсФорм="')[1].split('" ТипИнф=')[0]
-        print('vers_form = ', vers_form)
-        print('VERS_FORMAT_EGRUL = ', VERS_FORMAT_EGRUL)
+        print("vers_form = ", vers_form)
+        print("VERS_FORMAT_EGRUL = ", VERS_FORMAT_EGRUL)
         if vers_form == VERS_FORMAT_EGRUL:
             rez_clear = xml_clear(mess_i)
             # print(rez_clear)
