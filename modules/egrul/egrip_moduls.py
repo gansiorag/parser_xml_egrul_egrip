@@ -22,14 +22,14 @@ from modules.egrul.egrip_adres import address_info_egrip
 from modules.egrul.egrip_sv_history import sv_zap_egrip
 from modules.egrul.egrip_svokved import egrip_svokved
 from modules.egrul.com_f import cnst, get_logger, common_write_one
-
+from modules.egrul.egrul_moduls import deep_get
 
 # Устанавливаем все константы
-# CV = cnst()
-# EGRIP = CV["egrip"]
+CV = cnst()
+EGRIP = CV["egrip"]
 # INPUT_EGRIP = CV["input_egrip"]
-# VERS_FORMAT_EGRIP = CV["vers_format_egrip"]
-# FORMAT_EGRIP = CV["format_egrip"]
+VERS_FORMAT_EGRIP = CV["vers_format_egrip"]
+FORMAT_EGRIP = CV["format_egrip"]
 
 # task ARCH-623 common
 # task ARCH-772	proba_egrip
@@ -145,7 +145,7 @@ def process_list_egrip(l_d: list, b_key: str, n_t: str, base_data: dict):
 # task ARCH-772	proba_egrip
 
 
-def parser_svip(doc_source, rez_dict: dict, CODES_FNS: list, CV):
+def parser_svip(doc_source, rez_dict: dict, CODES_FNS: list, CV, razd: list):
     """_summary_
 
     Args:
@@ -275,7 +275,7 @@ def parser_svip(doc_source, rez_dict: dict, CODES_FNS: list, CV):
     #                      base_data, CV['schema_get'])
 
 
-def parse_egrip_message(message: str, codes_fns: list, config: dict) -> None:
+def parse_egrip_message(message: str, codes_fns: list, cv: dict, razd: list) -> None:
     """
     Parse and process an EGRIP XML message.
 
@@ -284,50 +284,60 @@ def parse_egrip_message(message: str, codes_fns: list, config: dict) -> None:
         codes_fns (list): List of codes for FNS processing.
         config (dict): Configuration dictionary containing formats, schemas, etc.
     """
-    print("Processing EGRIP message")
+    print("parse_egrip_message - EGRIP message!!!!")
     print(f"Message length: {len(message)}")
-    logger.debug(f"Codes FNS count: {len(codes_fns)}")
-
-    try:
-        # Clear invalid characters from XML
-        cleaned_xml = xml_clear(message)
-        # Parse XML to dictionary
-        xml_dict = xd.parse(cleaned_xml)
-    except Exception as e:
-        logger.error(f"Failed to parse EGRIP XML: {e}")
-        return
-
-    num_docs = 0
-
-    # Extract documents; handle single dict or list
-    if "Файл" not in xml_dict:
-        logger.warning("No 'Файл' key in XML dictionary")
-        return
-    file_content = xml_dict["Файл"]
-    if "Документ" not in file_content:
-        logger.warning("No 'Документ' key in file content")
-        return
-
-    documents = file_content["Документ"]
-
-    def _process_document(doc: dict):
-        nonlocal num_docs
+    print(f"Codes FNS count: {len(codes_fns)}")
+    VERS_FORMAT_EGRIP = cv["vers_format_egrip"]
+    
+    def _process_document(doc: dict, rzd: list, num_docs: int):
+        # nonlocal num_docs
         if "СвИП" not in doc:
             logger.warning("No 'СвИП' in document, skipping")
-            return
+            return num_docs
         doc_source = doc["СвИП"]
-        logger.debug(f"Processing SvIP document: {doc_source.get('@ОГРНИП', 'Unknown')}")
-        parser_svip(doc_source, xml_dict, codes_fns, config)
+        print(f"Processing SvIP document: {doc_source.get('@ОГРНИП', 'Unknown')}")
+        parser_svip(doc_source, xml_dict, codes_fns, cv, rzd)
         num_docs += 1
+        return num_docs
+    
+    if message:
+        print("Processing message egrip...")
+        print(message)
+        vers_form = message.split('ВерсФорм="')[1].split('" ТипИнф=')[0]
+        print("vers_form = ", vers_form)
+        print("VERS_FORMAT_EGRIP = ", VERS_FORMAT_EGRIP)
+        if vers_form == VERS_FORMAT_EGRIP:
+            try:
+                # Clear invalid characters from XML
+                cleaned_xml = xml_clear(message)
+                # Parse XML to dictionary
+                xml_dict = xd.parse(cleaned_xml)
+            except Exception as e:
+                print(f"Failed to parse EGRIP XML: {e}")
+                return
+            
+            value = deep_get(xml_dict, razd)
+            # num_docs = 0
 
-    # Handle multiple or single document
-    if isinstance(documents, list):
-        print(f"Found {len(documents)} documents in list")
-        for doc in documents:
-            _process_document(doc)
-            print(f"Processed document {num_docs}")
-    elif isinstance(documents, dict):
-        print("Found single document")
-        _process_document(documents)
-    else:
-        logger.warning(f"Unexpected document type: {type(documents)}")
+            # # Extract documents; handle single dict or list
+            # if "Файл" not in xml_dict:
+            #     logger.warning("No 'Файл' key in XML dictionary")
+            #     return
+            # file_content = xml_dict["Файл"]
+            # if "Документ" not in file_content:
+            #     logger.warning("No 'Документ' key in file content")
+            #     return
+
+            # documents = file_content["Документ"]
+
+            # # Handle multiple or single document
+            # if isinstance(documents, list):
+            #     print(f"Found {len(documents)} documents in list")
+            #     for doc in documents:
+            #         num_docs = _process_document(doc, razd, num_docs)
+            #         print(f"Processed document {num_docs}")
+            # elif isinstance(documents, dict):
+            #     print("Found single document")
+            #     num_docs = _process_document(documents, razd, num_docs)
+            # else:
+            #     logger.warning(f"Unexpected document type: {type(documents)}")

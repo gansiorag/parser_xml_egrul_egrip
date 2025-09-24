@@ -45,7 +45,7 @@ class Egrul_egrip:
             if "<ЕГРИП>" in dataf:
                 dataf = dataf.replace("<ЕГРИП>", "<Файл><Документ>")
                 dataf = dataf.replace("</ЕГРИП>", "</Документ></Файл>")
-                parse_egrip_message(dataf, CODES_FNS, CV)
+                parse_egrip_message(dataf, CODES_FNS, CV, razd)
             elif "<ЕГРЮЛ>" in dataf:
                 dataf = dataf.replace("<ЕГРЮЛ>", "<Файл><Документ>")
                 dataf = dataf.replace("</ЕГРЮЛ>", "</Документ></Файл>")
