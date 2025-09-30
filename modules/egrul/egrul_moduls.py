@@ -338,44 +338,53 @@ def parser_egrul_mesage(mess_i, codes_fns: list, cv: dict, razd: list):
     # print("codes_fns == ", codes_fns)
     VERS_FORMAT_EGRUL = cv["vers_format_egrul"]
     if mess_i:
-        print("Processing message...")
+        
 
-        # print(mess_i)
-        # Process the message
-        # Определяем тип данных type_data  и версию формата vers_form
-        # type_data = mess_i.split('ТипИнф="')[1].split('" ВерсПрог=')[0]
-        vers_form = mess_i.split('ВерсФорм="')[1].split('" ТипИнф=')[0]
-        print("vers_form = ", vers_form)
-        print("VERS_FORMAT_EGRUL = ", VERS_FORMAT_EGRUL)
-        if vers_form == VERS_FORMAT_EGRUL:
+        # type file from https://egrul.itsoft.ru/
+        if '<ЕГРЮЛ>' in mess_i:
+            print("Processing message <ЕГРЮЛ>")
             rez_clear = xml_clear(mess_i)
             # print(rez_clear)
             rez_dict = xd.parse(rez_clear)
-            # print(rez_dict)
-            value = deep_get(rez_dict, razd)  # 42
-            # print('value = ', value)
-            # num_doc = 0
-            # if isinstance(rez_dict["Файл"]["Документ"], list):
-            #     print(f'=== Документов {len(rez_dict["Файл"]["Документ"])} в списке ')
-            #     list_doc = rez_dict["Файл"]["Документ"]
-            #     for dd in list_doc:
-            #         # doc_source = dd
-            #         num_doc += 1
-            #         print(f"=== Документ {num_doc} === from {len(list_doc)}")
-            #         print("content document => ",dd)
-            #         if "СвЮЛ" in dd:
-            #             doc_source = dd["СвЮЛ"]
-            #             new_d = {"Файл": {"Документ": {"СвЮЛ": doc_source}}}
-            #             parser_svul(doc_source, codes_fns, cv)
-            # if isinstance(rez_dict["Файл"]["Документ"], dict):
-            #     print(f"=== Документ {num_doc} === from dict")
+            value = deep_get(rez_dict, razd)
+            
+        if 'ВерсФорм="' in mess_i:
+            print("Processing message ВерсФорм=")
+            # Process the message
+            # Определяем тип данных type_data  и версию формата vers_form
+            # type_data = mess_i.split('ТипИнф="')[1].split('" ВерсПрог=')[0]
+            vers_form = mess_i.split('ВерсФорм="')[1].split('" ТипИнф=')[0]
+            print("vers_form = ", vers_form)
+            print("VERS_FORMAT_EGRUL = ", VERS_FORMAT_EGRUL)
+            if vers_form == VERS_FORMAT_EGRUL:
+                rez_clear = xml_clear(mess_i)
+                # print(rez_clear)
+                rez_dict = xd.parse(rez_clear)
+                # print(rez_dict)
+                value = deep_get(rez_dict, razd)  # 42
+                # print('value = ', value)
+                # num_doc = 0
+                # if isinstance(rez_dict["Файл"]["Документ"], list):
+                #     print(f'=== Документов {len(rez_dict["Файл"]["Документ"])} в списке ')
+                #     list_doc = rez_dict["Файл"]["Документ"]
+                #     for dd in list_doc:
+                #         # doc_source = dd
+                #         num_doc += 1
+                #         print(f"=== Документ {num_doc} === from {len(list_doc)}")
+                #         print("content document => ",dd)
+                #         if "СвЮЛ" in dd:
+                #             doc_source = dd["СвЮЛ"]
+                #             new_d = {"Файл": {"Документ": {"СвЮЛ": doc_source}}}
+                #             parser_svul(doc_source, codes_fns, cv)
+                # if isinstance(rez_dict["Файл"]["Документ"], dict):
+                #     print(f"=== Документ {num_doc} === from dict")
 
-            #     if "СвЮЛ" in rez_dict["Файл"]["Документ"]:
-            #         parser_svul(
-            #             rez_dict["Файл"]["Документ"]["СвЮЛ"],
-            #             codes_fns, cv
-            #         )
-            #     num_doc += 1
+                #     if "СвЮЛ" in rez_dict["Файл"]["Документ"]:
+                #         parser_svul(
+                #             rez_dict["Файл"]["Документ"]["СвЮЛ"],
+                #             codes_fns, cv
+                #         )
+                #     num_doc += 1
 
     # except Exception as process_error:
     #     logger.error(f"Error processing message: {process_error}")

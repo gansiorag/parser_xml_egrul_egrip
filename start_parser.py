@@ -15,16 +15,18 @@ if __name__ == '__main__':
     # list_razd = [['Файл', 'Документ', 'СвЮЛ', 'СвАдресЮЛ',	'АдресРФ']]
     # list_razd = [['Файл', 'Документ', 'СвЮЛ', 'СвАдресЮЛ',	'АдресРФ', 'Город']]
     # list_razd = [['Файл', 'Документ', 'СвЮЛ']]
-    list_razd = [['Файл', 'Документ', 'СвИП', 'СвОКВЭД']]
+    # list_razd = [['Файл', 'Документ', 'СвИП', 'СвОКВЭД']]
+    list_razd = [['ЕГРЮЛ', 'СвЮЛ', 'СвУчредит']]
     # list_razd = []
     for name_file in [
         # os.path.join(new_path, 'dataset', 'egrul', 'push_mes_egrul.xml'),
         # os.path.join(new_path, 'dataset', 'egrip', 'push_mes_egrip.xml')
         # os.path.join(new_path, 'dataset', 'egrul', 'error_push_egrul.xml')
-        os.path.join(new_path, 'dataset', 'egrul', '1123926035397.xml')
+        # os.path.join(new_path, 'dataset', 'egrul', '1123926035397.xml')
+        os.path.join(new_path, 'dataset', 'egrul/aronov', '7107133140.xml')
         # os.path.join(new_path, 'dataset', 'egrip', '304010131600079.xml')
         # os.path.join(new_path, 'dataset', 'egrip', '323420500054722_error.xml')
-        #os.path.join(new_path, 'dataset', 'egrip/egrip_error', '304420535600015.xml')
+        # os.path.join(new_path, 'dataset', 'egrip/egrip_error', '304420535600015.xml')
     ]:
         if list_razd:
             for razd in list_razd:

@@ -43,12 +43,12 @@ class Egrul_egrip:
             print(f"len(dataf {len(dataf)}")
             # Extracting data using a single split operation
             if "<ЕГРИП>" in dataf:
-                dataf = dataf.replace("<ЕГРИП>", "<Файл><Документ>")
-                dataf = dataf.replace("</ЕГРИП>", "</Документ></Файл>")
+                # dataf = dataf.replace("<ЕГРИП>", "<Файл><Документ>")
+                # dataf = dataf.replace("</ЕГРИП>", "</Документ></Файл>")
                 parse_egrip_message(dataf, CODES_FNS, CV, razd)
             elif "<ЕГРЮЛ>" in dataf:
-                dataf = dataf.replace("<ЕГРЮЛ>", "<Файл><Документ>")
-                dataf = dataf.replace("</ЕГРЮЛ>", "</Документ></Файл>")
+                # dataf = dataf.replace("<ЕГРЮЛ>", "<Файл><Документ>")
+                # dataf = dataf.replace("</ЕГРЮЛ>", "</Документ></Файл>")
                 parser_egrul_mesage(dataf, CODES_FNS, CV, razd)
             elif "<?xml" in dataf:
                 type_data = dataf.split('ТипИнф="')[1].split('" ВерсПрог=')[0]
