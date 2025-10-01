@@ -275,7 +275,8 @@ def parser_svip(doc_source, rez_dict: dict, CODES_FNS: list, CV, razd: list):
     #                      base_data, CV['schema_get'])
 
 
-def parse_egrip_message(message: str, codes_fns: list, cv: dict, razd: list) -> None:
+def parse_egrip_message(message: str, codes_fns: list, cv: dict, razd: list,
+                                        key_bd, key_lev) -> None:
     """
     Parse and process an EGRIP XML message.
 

@@ -321,7 +321,8 @@ def deep_get(d, keys, pr=0, default=None):
     return d, pr
 
 
-def parser_egrul_mesage(mess_i, codes_fns: list, cv: dict, razd: list):
+def parser_egrul_mesage(mess_i, codes_fns: list, cv: dict, razd: list,
+                                        key_bd, key_lev):
     """_summary_
 
     Args:
@@ -338,8 +339,6 @@ def parser_egrul_mesage(mess_i, codes_fns: list, cv: dict, razd: list):
     # print("codes_fns == ", codes_fns)
     VERS_FORMAT_EGRUL = cv["vers_format_egrul"]
     if mess_i:
-        
-
         # type file from https://egrul.itsoft.ru/
         if '<ЕГРЮЛ>' in mess_i:
             print("Processing message <ЕГРЮЛ>")
@@ -347,7 +346,12 @@ def parser_egrul_mesage(mess_i, codes_fns: list, cv: dict, razd: list):
             # print(rez_clear)
             rez_dict = xd.parse(rez_clear)
             value = deep_get(rez_dict, razd)
-            
+            # print('value = ', value[0])
+            if isinstance(value[0], dict):
+                for itt in value[0]:
+                    if isinstance(value[0][itt], list):
+                        for kk in value[0][itt]:
+                            print(itt, '  ===>  ', kk)
         if 'ВерсФорм="' in mess_i:
             print("Processing message ВерсФорм=")
             # Process the message

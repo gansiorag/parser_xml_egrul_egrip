@@ -33,7 +33,8 @@ class Egrul_egrip:
         CV["input_egrip"] = "ЕГРИП_ОТКР_СВЕД"
         CV["input_egrul"] = "ЕГРЮЛ_ОТКР_СВЕД"
 
-    def read_egrul_egrip_file_xml(self, name_file: str, razd: list):
+    def read_egrul_egrip_file_xml(self, name_file: str, razd: list,
+                                  key_bd='n', key_lev='0'):
         """Read from file"""
         print("START")
         CODES_FNS = get_codes_fns()
@@ -45,11 +46,15 @@ class Egrul_egrip:
             if "<ЕГРИП>" in dataf:
                 # dataf = dataf.replace("<ЕГРИП>", "<Файл><Документ>")
                 # dataf = dataf.replace("</ЕГРИП>", "</Документ></Файл>")
-                parse_egrip_message(dataf, CODES_FNS, CV, razd)
+                if key_lev == '0':
+                    parse_egrip_message(dataf, CODES_FNS, CV, razd,
+                                        key_bd, key_lev)
             elif "<ЕГРЮЛ>" in dataf:
                 # dataf = dataf.replace("<ЕГРЮЛ>", "<Файл><Документ>")
                 # dataf = dataf.replace("</ЕГРЮЛ>", "</Документ></Файл>")
-                parser_egrul_mesage(dataf, CODES_FNS, CV, razd)
+                if key_lev == '0':
+                    parser_egrul_mesage(dataf, CODES_FNS, CV, razd,
+                                        key_bd, key_lev)
             elif "<?xml" in dataf:
                 type_data = dataf.split('ТипИнф="')[1].split('" ВерсПрог=')[0]
                 vers_form = dataf.split('ВерсФорм="')[1].split('" ТипИнф=')[0]
@@ -69,12 +74,16 @@ class Egrul_egrip:
                         type_data == CV["input_egrul"]
                         and vers_form == CV["vers_format_egrul"]
                     ):
-                        parser_egrul_mesage(dataf, CODES_FNS, CV, razd)
+                        if key_lev == '0': 
+                            parser_egrul_mesage(dataf, CODES_FNS, CV, razd,
+                                        key_bd, key_lev)
                     if (
                         type_data == CV["input_egrip"]
                         and vers_form == CV["vers_format_egrip"]
                     ):
-                        parse_egrip_message(dataf, CODES_FNS, CV)
+                        if key_lev == '0':
+                            parse_egrip_message(dataf, CODES_FNS, CV,
+                                        key_bd, key_lev)
             else:
                 print("Message format is incorrect or missing required fields.")
                 print("Error dataf ===>>>", dataf)

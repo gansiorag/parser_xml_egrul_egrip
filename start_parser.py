@@ -18,6 +18,14 @@ if __name__ == '__main__':
     # list_razd = [['Файл', 'Документ', 'СвИП', 'СвОКВЭД']]
     list_razd = [['ЕГРЮЛ', 'СвЮЛ', 'СвУчредит']]
     # list_razd = []
+    key_bd = 'y' # запись данных в таблицу разделов, базы данных.add()
+    key_lev = '0'
+    # уровень обрабоки файла 
+    # 0 - Получение структуры до уровня описанного в list_razd
+    # 1 - Получение структуры до уровня описанного в list_razd со значениями 
+    # последнего поля
+    # 2 - Получение всех атрибутов со значениями подраздела из list_razd
+
     for name_file in [
         # os.path.join(new_path, 'dataset', 'egrul', 'push_mes_egrul.xml'),
         # os.path.join(new_path, 'dataset', 'egrip', 'push_mes_egrip.xml')
@@ -33,12 +41,12 @@ if __name__ == '__main__':
                 print("name_file ", name_file)
                 print("razd ", razd)
                 if os.path.exists(name_file):
-                    b_egr.read_egrul_egrip_file_xml(name_file, razd)
+                    b_egr.read_egrul_egrip_file_xml(name_file, razd, key_bd, key_lev)
                 else:
                     print(f"File not found: {name_file}")
         else:
             print("name_file ", name_file)
             if os.path.exists(name_file):
-                b_egr.read_egrul_egrip_file_xml(name_file, None)
+                b_egr.read_egrul_egrip_file_xml(name_file, None, key_bd, key_lev)
             else:
                 print(f"File not found: {name_file}")
