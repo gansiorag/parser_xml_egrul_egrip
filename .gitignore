@@ -5,3 +5,4 @@ __pycache__/
 .venv_egrul/
 .vscode/settings.json
 modules/__pycache__/
+search_full_data/
