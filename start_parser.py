@@ -16,9 +16,11 @@ if __name__ == '__main__':
     # list_razd = [['Файл', 'Документ', 'СвЮЛ', 'СвАдресЮЛ',	'АдресРФ', 'Город']]
     # list_razd = [['Файл', 'Документ', 'СвЮЛ']]
     # list_razd = [['Файл', 'Документ', 'СвИП', 'СвОКВЭД']]
-    list_razd = [['ЕГРЮЛ', 'СвЮЛ', 'СвУчредит']]
+    # list_razd = [['Файл', 'Документ', 'СвЮЛ', 'СвОКВЭД']]
+    list_razd = [['ЕГРЮЛ', 'СвЮЛ', 'СвОКВЭД', 'СвОКВЭДОсн', '@КодОКВЭД']]
+    # list_razd = [['ЕГРЮЛ', 'СвЮЛ', 'СвУчредит']]
     # list_razd = []
-    key_bd = 'y' # запись данных в таблицу разделов, базы данных.add()
+    key_bd = 'y' # 'y' 'n' запись данных в таблицу разделов, базы данных.add()
     key_lev = '0'
     # уровень обрабоки файла 
     # 0 - Получение структуры до уровня описанного в list_razd
@@ -31,7 +33,8 @@ if __name__ == '__main__':
         # os.path.join(new_path, 'dataset', 'egrip', 'push_mes_egrip.xml')
         # os.path.join(new_path, 'dataset', 'egrul', 'error_push_egrul.xml')
         # os.path.join(new_path, 'dataset', 'egrul', '1123926035397.xml')
-        os.path.join(new_path, 'dataset', 'egrul/aronov', '7107133140.xml')
+        # os.path.join(new_path, 'dataset', 'egrul/aronov', '7107133140.xml')
+        os.path.join(new_path, 'dataset', 'egrul/ogrn_v2_17_11_2025', '1031000860109.xml')        
         # os.path.join(new_path, 'dataset', 'egrip', '304010131600079.xml')
         # os.path.join(new_path, 'dataset', 'egrip', '323420500054722_error.xml')
         # os.path.join(new_path, 'dataset', 'egrip/egrip_error', '304420535600015.xml')

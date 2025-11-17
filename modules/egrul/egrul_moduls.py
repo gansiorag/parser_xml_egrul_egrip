@@ -349,9 +349,14 @@ def parser_egrul_mesage(mess_i, codes_fns: list, cv: dict, razd: list,
             # print('value = ', value[0])
             if isinstance(value[0], dict):
                 for itt in value[0]:
+                    # print('itt', itt)
                     if isinstance(value[0][itt], list):
                         for kk in value[0][itt]:
                             print(itt, '  ===>  ', kk)
+                    if isinstance(value[0][itt], dict) and itt in razd:
+                        print(itt, '  ===>  ', value[0][itt])
+                    if isinstance(value[0][itt], str) and itt in razd:
+                        print(itt, '  ===>  ', value[0][itt])
         if 'ВерсФорм="' in mess_i:
             print("Processing message ВерсФорм=")
             # Process the message
