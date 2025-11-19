@@ -42,7 +42,10 @@ class Egrul_egrip:
         with open(name_file, "r", encoding="utf-8") as i_f:
             dataf = i_f.read()
             print(f"len(dataf {len(dataf)}")
-            # Extracting data using a single split operation
+
+            # Могут придти два типа фыйлов по структуре. Поэтому первый
+            # шаг- определеяем какой файл по структуре пришел.
+
             if "<ЕГРИП>" in dataf:
                 # dataf = dataf.replace("<ЕГРИП>", "<Файл><Документ>")
                 # dataf = dataf.replace("</ЕГРИП>", "</Документ></Файл>")
@@ -82,7 +85,7 @@ class Egrul_egrip:
                         and vers_form == CV["vers_format_egrip"]
                     ):
                         if key_lev == '0':
-                            parse_egrip_message(dataf, CODES_FNS, CV,
+                            parse_egrip_message(dataf, CODES_FNS, CV, razd,
                                         key_bd, key_lev)
             else:
                 print("Message format is incorrect or missing required fields.")

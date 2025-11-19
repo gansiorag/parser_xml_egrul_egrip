@@ -12,6 +12,7 @@ from base_egrul_egrip import Egrul_egrip
 
 if __name__ == '__main__':
     b_egr = Egrul_egrip()
+    # 
     # list_razd = [['Файл', 'Документ', 'СвЮЛ', 'СвАдресЮЛ',	'АдресРФ']]
     # list_razd = [['Файл', 'Документ', 'СвЮЛ', 'СвАдресЮЛ',	'АдресРФ', 'Город']]
     # list_razd = [['Файл', 'Документ', 'СвЮЛ']]
